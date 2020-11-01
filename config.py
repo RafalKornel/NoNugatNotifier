@@ -3,7 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "some hard to guess secret key")
-    REGISTER_KEY = os.environ.get("REGISTER_KEY", "hakiery-miesiąc bez orzecha")
+    REGISTER_KEY = os.environ.get("REGISTER_KEY", "test_key")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     FLASKY_ADMIN = os.environ.get("FLASKY_ADMIN")
 
