@@ -5,6 +5,7 @@ from ..models import User, Group
 from .forms import LoginForm, RegistrationForm
 from flask_login import login_user, logout_user, current_user
 from .. import db
+from datetime import date
 
 
 @auth.route("/login", methods=["POST", "GET"])
@@ -23,10 +24,9 @@ def login():
 
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
-            next = request.args.get("next")
-            if next is None or not next.startswith("/"):
-                next = url_for("main.index")
-            return redirect(next)
+
+            return redirect(url_for("main.index"))
+
         flash("Invalid username or password")
 
     return render_template("auth/login.html", form=LoginForm())
@@ -52,7 +52,8 @@ def register():
         user = User(
             username = form.username.data,
             password = form.password.data,
-            group = group
+            group = group,
+            last_seen = date.today()
         )
 
         db.session.add(user)

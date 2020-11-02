@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<h1>This will be question</h1> 
+
+{% import 'bootstrap/wtf.html' as wtf %} 
+
+{{ form.answer.label }}
+{{ wtf.quick_form(form)}}
+
+{% endblock %}

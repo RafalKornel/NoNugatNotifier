@@ -1,6 +1,7 @@
 from . import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import date
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -14,6 +15,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True)
     _password_hash = db.Column(db.String(200))
     failed = db.Column(db.Boolean, default=False)
+    last_seen = db.Column(db.Date)
+    answered_today = db.Column(db.Boolean, default=False)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))
 
     @property
@@ -27,10 +30,14 @@ class User(db.Model, UserMixin):
     def verify_password(self, password):
         return check_password_hash(self._password_hash, password)
 
+    
+    def seen_today(self):
+        return self.last_seen == date.today()
 
     def __repr__(self):
-        return f"<ModelName: {self.username}>"
-
+        return f"<User: {self.username} | failed: {self.failed} | \
+             answered_today: {self.answered_today} | last_seen: {self.last_seen} | \
+             group: {self.group}>"
 
 class Group(db.Model):
     __tablename__ = "groups"
