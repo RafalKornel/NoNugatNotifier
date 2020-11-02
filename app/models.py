@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True)
     _password_hash = db.Column(db.String(200))
     failed = db.Column(db.Boolean, default=False)
+    date_of_failure = db.Column(db.Date)
     last_seen = db.Column(db.Date)
     answered_today = db.Column(db.Boolean, default=False)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))
@@ -35,9 +36,9 @@ class User(db.Model, UserMixin):
         return self.last_seen == date.today()
 
     def __repr__(self):
-        return f"<User: {self.username} | failed: {self.failed} | \
-             answered_today: {self.answered_today} | last_seen: {self.last_seen} | \
-             group: {self.group}>"
+        return f"<User: {self.username} | failed: {self.failed} {self.date_of_failure} |\
+             answered_today: {self.answered_today} | last_seen: {self.last_seen}\
+                  | group: {self.group}>"
 
 class Group(db.Model):
     __tablename__ = "groups"
