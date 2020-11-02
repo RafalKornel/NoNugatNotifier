@@ -21,7 +21,7 @@
             
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
-                <li><a style="cursor: default;">Logged as: {{ current_user.username }}</a></li>
+                <li><a style="cursor: default;">Logged as: {{ current_user.username }}, group: {{ current_user.group }}</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
                 {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Log in</a></li>

@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, current_app
 from flask_login.utils import login_required
 from . import auth
-from ..models import User
+from ..models import User, Group
 from .forms import LoginForm, RegistrationForm
 from flask_login import login_user, logout_user, current_user
 from .. import db
@@ -42,11 +42,17 @@ def logout():
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
-    if form.validate_on_submit() and validate_secret_key(form.register_key.data):
+    if form.validate_on_submit():
+
+        group = get_group_by_key(form.register_key.data)
+        if group is None:
+            flash("Invalid register key. Please contact administrator.")
+            return render_template("auth/register.html", form=form)
 
         user = User(
             username = form.username.data,
             password = form.password.data,
+            group = group
         )
 
         db.session.add(user)
@@ -60,3 +66,9 @@ def register():
 
 def validate_secret_key(key):
     return current_app.config["REGISTER_KEY"] == key
+
+
+def get_group_by_key(key):
+    ''' If key is not valid, then returns None '''
+    group = Group.query.filter_by(key=key).first()
+    return group

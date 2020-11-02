@@ -13,6 +13,8 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
     _password_hash = db.Column(db.String(200))
+    failed = db.Column(db.Boolean, default=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))
 
     @property
     def password(self):
@@ -28,3 +30,14 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"<ModelName: {self.username}>"
+
+
+class Group(db.Model):
+    __tablename__ = "groups"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    key = db.Column(db.String(64))
+    users = db.relationship("User", backref="group")
+
+    def __repr__(self):
+        return f"<Group {self.name}>"
