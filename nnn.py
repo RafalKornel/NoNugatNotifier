@@ -1,6 +1,7 @@
 from app import create_app, db
 from app.models import User, Group
 from flask_migrate import Migrate
+import click
 
 app = create_app("development")
 
@@ -17,3 +18,11 @@ def create_tables():
 @app.cli.command("drop_tables")
 def drop_tables():
     db.drop_all()
+
+@app.cli.command("add_group")
+@click.argument("group_name")
+@click.argument("group_key")
+def add_group(group_name, group_key):
+    g = Group(name=group_name, key=group_key)
+    db.session.add(g)
+    db.session.commit()
