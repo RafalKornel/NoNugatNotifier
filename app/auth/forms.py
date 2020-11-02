@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from ..models import User
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms_components import ColorField
 from wtforms.validators import DataRequired, EqualTo, Length, Email, Regexp, ValidationError
 
 class LoginForm(FlaskForm):
@@ -25,6 +26,7 @@ class RegistrationForm(FlaskForm):
         EqualTo("password", message="Passwords must match")])
 
     register_key = StringField("Secret key", validators=[DataRequired()])
+    color = ColorField()
     submit = SubmitField("Register")
 
     def validate_username(self, field):

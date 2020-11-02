@@ -52,6 +52,7 @@ def register():
         user = User(
             username = form.username.data,
             password = form.password.data,
+            color    = str(form.color.data),
             group = group,
             last_seen = date.today()
         )
