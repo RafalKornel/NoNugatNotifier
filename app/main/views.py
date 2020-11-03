@@ -12,13 +12,15 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for("auth.login"))
     else: 
-        if not current_user.seen_today():
+        if current_user.failed or current_user.seen_today():
+            return redirect(url_for("main.calendar"))
+        
+        else:
             current_user.answered_today = False
             db.session.add(current_user)
             db.session.commit()
             return redirect(url_for("main.question"))
-        else:
-            return redirect(url_for("main.calendar"))
+
 
 @main.route("/calendar")
 @login_required
@@ -43,11 +45,7 @@ def calendar():
 @login_required
 def question():
 
-    if current_user.answered_today: 
-        print(current_user)
-        return redirect(url_for("main.calendar"))
-
-    if current_user.failed:
+    if current_user.answered_today or current_user.failed: 
         return redirect(url_for("main.calendar"))
 
     return render_template( "question.html" )
@@ -75,11 +73,3 @@ def answer(ans):
     db.session.commit()
     
     return redirect(url_for("main.calendar"))
-
-
-    form = QuestionForm()
-    if form.validate_on_submit():
-        answer = True if form.answer.data == "yes" else False
-
-        
-    return redirect(url_for("main.question"))
