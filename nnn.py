@@ -2,7 +2,7 @@ from app import create_app, db
 from app.models import User, Group
 import click, os
 
-app = create_app( os.environ.get("CONFIG_TYPE", "development"))
+app = create_app( os.environ.get("FLASK_CONFIG", "development"))
 
 @app.shell_context_processor
 def make_shell_context():

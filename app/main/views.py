@@ -23,9 +23,20 @@ def index():
 def calendar():
     if not current_user.answered_today: 
         return redirect(url_for("main.question"))
+    users = User.query.filter_by(group=current_user.group)
+    users_calendar = { i: [] for i in range(1, 32) }
+    for u in users:
+        i = date.today().day if not u.failed else u.date_of_failure.day
+        users_calendar[i].append(u)
+
+    print(users_calendar)
+
     return render_template(
         "calendar.html", 
-        users=User.query.filter_by(group=current_user.group))
+        users = User.query.filter_by(group=current_user.group).filter_by(failed=False),
+        failed = User.query.filter_by(group=current_user.group).filter_by(failed=True),
+        today = date.today().day,
+        calendar = users_calendar)
 
 
 @main.route("/question", methods=["GET", "POST"])
@@ -34,15 +45,11 @@ def question():
 
     if current_user.answered_today: 
         flash("Already answered today.")
-        return redirect(url_for(
-            "main.calendar"), 
-            users=User.query.filter_by(group=current_user.group))
+        return redirect(url_for("main.calendar"))
 
     if current_user.failed:
         flash("Sorry, you failed.")
-        return redirect(url_for(
-            "main.calendar"), 
-            users=User.query.filter_by(group=current_user.group))
+        return redirect(url_for("main.calendar"))
 
     form = QuestionForm()
     if form.validate_on_submit():

@@ -1,16 +1,69 @@
-{% extends "base.html" %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
 
-{% block page_content %}
+<aside class="sidebar">
+    <h1>NoNugatNotifier</h1>
 
-    <ul>
-    {% for u in users %}
+    <div class="users">
 
-    <li style="background-color: {{ u.color }} ;">
-        {{ u }}
-    </li>
+        <div class="users-tab in-game">
+            <h2>In game</h2>
+            <ul>
+                {% for user in users %}
+                <li>
+                    <div class="circle-sidebar" style="background: {{user.color}}"></div>
+                    <p>{{user.username}}</p>
+                </li>
+                {% endfor %}
+            </ul>
 
-    {% endfor %}
-    </ul>
+        </div>
+
+        <div class="users-tab failed">
+            <h2>Failed</h2>
+            <ul>
+                {% for user in failed %}
+                <li>
+                    <div class="circle-sidebar" style="background: {{user.color}}"></div>
+                    <p> <span style="text-decoration: line-through;">{{user.username}}</span> {{user.date_of_failure}}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    <div class="account-settings">
+        <div class="logout"><a href="/logout">Logout</a></div>
+        <div class="settings">Settings</div>
+    </div>
+</aside>
+
+<section class="calendar">
+    <div class="inner">
+        {% for i in range(-5, 31) %}
+        {% if i <= 0 %}
+        <div class="calendar-day-empty">
+            <p> </p>
+        </div>
+        {% else %}
+        <div class="calendar-day {% if i == today %}today{% endif %} {% if calendar[i] != [] %}users-within{% endif %}" id="{{i}}">
+            <p>{{i}}</p>
+
+            <div class="cur-users">
+                {% for u in calendar[i] %}
+
+                <div class="user-calendar">
+                <div class="circle-sidebar smaller" style="background: {{u.color}};"></div>
+                    <div class="username"> {{u.username}} </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        </div>
 
 
-{% endblock %}
+
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
