@@ -14,6 +14,8 @@ def index():
     else: 
         if not current_user.seen_today():
             current_user.answered_today = False
+            db.session.add(current_user)
+            db.session.commit()
             return redirect(url_for("main.question"))
         else:
             return redirect(url_for("main.calendar"))
@@ -29,8 +31,6 @@ def calendar():
         i = date.today().day if not u.failed else u.date_of_failure.day
         users_calendar[i].append(u)
 
-    print(users_calendar)
-
     return render_template(
         "calendar.html", 
         users = User.query.filter_by(group=current_user.group).filter_by(failed=False),
@@ -44,12 +44,13 @@ def calendar():
 def question():
 
     if current_user.answered_today: 
+        print(current_user)
         return redirect(url_for("main.calendar"))
 
     if current_user.failed:
         return redirect(url_for("main.calendar"))
 
-    return render_template( "question.html", form=QuestionForm() )
+    return render_template( "question.html" )
 
 
 @main.route("/answer/<ans>")
@@ -59,9 +60,13 @@ def answer(ans):
     if ans not in ["yes", "no"]:
         return redirect(url_for("main.question"))
 
+    if current_user.answered_today:
+        return redirect(url_for("main.calendar"))
+
     answer = (ans == "yes")
 
-    current_user.date_of_failure = date.today()
+    if answer:
+        current_user.date_of_failure = date.today()
     current_user.failed = answer
     current_user.answered_today = True
     current_user.last_seen = date.today()

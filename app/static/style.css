@@ -140,6 +140,7 @@
 
 .username {
     display: none;
+    margin-left: auto;
 }
 
 .users-within:hover .username {
@@ -147,8 +148,8 @@
 }
 
 .users-within:hover {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
 }
 
 .users-within:hover .cur-users {
@@ -156,6 +157,7 @@
     overflow: scroll;
     scrollbar-color: var(--light) transparent;
     direction: ltr;
+    width: 80%;
 }
 
 @media screen and (max-width: 1000px)
