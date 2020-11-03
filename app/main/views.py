@@ -25,10 +25,10 @@ def index():
 @main.route("/calendar")
 @login_required
 def calendar():
-    
+
     if not current_user.answered_today and not current_user.failed: 
         return redirect(url_for("main.question"))
-    if not current_user.seen_today():
+    if not current_user.seen_today() and not current_user.failed:
             current_user.answered_today = False
             db.session.add(current_user)
             db.session.commit()
