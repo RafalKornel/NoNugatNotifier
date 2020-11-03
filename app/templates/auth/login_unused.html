@@ -1,0 +1,9 @@
+<title>Log in</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+
+
+<div class="content login">
+    {% import "bootstrap/wtf.html" as wtf %}
+    {{ wtf.quick_form(form)}}
+</div>

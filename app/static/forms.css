@@ -1,0 +1,29 @@
+.content{
+    margin: auto;
+    color: var(--light);
+}
+
+.login form {
+    width: 500px;
+    height: 600px;
+    background-color: var(--dark);
+    border: 3px solid var(--dark-darker);
+    border-radius: 10px;
+    box-shadow:  10px  10px 20px -5px var(--dark-darker),
+                -10px -10px 20px -5px var(--dark-lighter);
+    display: flex;
+    flex-direction: column;
+}
+
+.login .form-group {
+    display: flex;
+
+}
+
+.login .form-group:first-child {
+    margin-left: auto;
+}
+
+.login .form-group:last-child {
+    margin-left: auto;
+} 

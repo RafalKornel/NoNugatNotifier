@@ -1,16 +1,29 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
 
-{% block title %} Log in {% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
 
-{% block page_content %}
 
-<h1 class="page-header">Log In</h1>
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    
+    <h1 class="page-header">Log In</h1>
 
 {% import "bootstrap/wtf.html" as wtf %}
 {{ wtf.quick_form(form)}}
 
-<p> New User? 
+<p style="font-size: 28px;"> New User? 
     <a href="{{ url_for('auth.register') }}">Register</a>
 </p>
 
+
+</div>
 {% endblock %}
