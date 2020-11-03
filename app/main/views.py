@@ -25,7 +25,7 @@ def index():
 @main.route("/calendar")
 @login_required
 def calendar():
-    if not current_user.answered_today: 
+    if not current_user.answered_today and not current_user.failed: 
         return redirect(url_for("main.question"))
     users = User.query.filter_by(group=current_user.group)
     users_calendar = { i: [] for i in range(1, 32) }
